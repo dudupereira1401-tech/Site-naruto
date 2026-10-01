@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quem é o Shinobi? – Jogo de adivinhar personagens de Naruto</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fbf4ea;--bg2:#fff;--tx:#1b1530;--mut:#6d6585;--ac:#f26b0f;--ac2:#4338ca;--bd:#ead9c3;--ok:#16a34a;--no:#dc2626}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#0f0d1e;--bg2:#1a1736;--tx:#f3f0ff;--mut:#a39dc8;--ac:#ff8a2b;--ac2:#8b83ff;--bd:#2c2757}}
+:root[data-theme=dark]{--bg:#0f0d1e;--bg2:#1a1736;--tx:#f3f0ff;--mut:#a39dc8;--ac:#ff8a2b;--ac2:#8b83ff;--bd:#2c2757}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;color:var(--tx);font:400 16px/1.55 Inter,system-ui,sans-serif;background:radial-gradient(circle at 8% 0,rgba(242,107,15,.16),transparent 40%),radial-gradient(circle at 100% 15%,rgba(67,56,202,.16),transparent 40%),var(--bg);min-height:100vh}
+h1,h2,h3,.logo{font-family:"Bebas Neue",Impact,"Arial Narrow",sans-serif;letter-spacing:.03em;font-weight:400;margin:0}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg2);border-bottom:3px solid var(--ac);display:flex;align-items:center;gap:8px;padding:8px 14px;flex-wrap:wrap}
+.logo{font-size:1.7rem;margin-right:auto;display:flex;gap:8px;align-items:center}
+.logo b{color:var(--ac)}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+nav a{color:var(--tx);text-decoration:none;font-weight:600;font-size:.92rem;padding:7px 12px;border-radius:999px}
+nav a.on,nav a:hover{background:var(--ac);color:#fff}
+.ic{background:var(--bg);border:2px solid var(--bd);color:var(--tx);border-radius:50%;width:40px;height:40px;font-size:1.1rem;cursor:pointer}
+main{max-width:920px;margin:0 auto;padding:22px 14px 40px}
+.pg{display:none}.pg.on{display:block;animation:in .35s}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.hero{text-align:center;padding:10px 0 18px}
+.hero h1{font-size:clamp(2.4rem,9vw,4.4rem);line-height:1}
+.hero h1 span{color:var(--ac)}
+.hero p,.mut{color:var(--mut)}
+.hero p{max-width:540px;margin:10px auto}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;align-items:end}
+label{display:block;font-weight:600;font-size:.85rem;margin-bottom:4px}
+input,select,textarea{width:100%;font:inherit;padding:11px 13px;border-radius:12px;border:2px solid var(--bd);background:var(--bg);color:var(--tx)}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--ac2);outline-offset:1px}
+.btn{background:var(--ac);color:#fff;border:0;font:inherit;font-weight:800;padding:12px 22px;border-radius:999px;cursor:pointer}
+.btn:hover{filter:brightness(1.1)}
+.btn.s{background:var(--bg);color:var(--tx);border:2px solid var(--bd)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pill{background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:4px 12px;font-weight:600;font-size:.85rem}
+ol.cl{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:8px}
+.cl li{padding:12px 14px;border-radius:12px;border:1px solid var(--bd)}
+.cl li.on{background:var(--bg);border-left:5px solid var(--ac);animation:in .4s}
+.cl li.lock{color:var(--mut);border-style:dashed}
+.cl b{display:block;font-size:.72rem;color:var(--ac);text-transform:uppercase;letter-spacing:.08em}
+.gf{display:flex;gap:8px;flex-wrap:wrap}.gf input{flex:1 1 200px;width:auto}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.x{background:rgba(220,38,38,.12);color:var(--no);padding:3px 10px;border-radius:999px;font-size:.82rem;font-weight:600}
+.msg{min-height:1.5em;font-weight:600}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.res{text-align:center;animation:pop .5s}@keyframes pop{from{transform:scale(.85);opacity:0}}
+.res svg{width:min(220px,60vw);border-radius:50%;border:5px solid var(--ac);background:var(--bg)}
+.res h2{font-size:2.8rem;margin:8px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.ch{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:12px;text-align:center;cursor:pointer;font:inherit;color:var(--tx);transition:transform .15s}
+.ch:hover{transform:translateY(-4px);border-color:var(--ac)}
+.ch svg{width:90px;border-radius:50%}
+.ch b{display:block;margin-top:4px}
+.tag{display:inline-block;font-size:.7rem;background:var(--bg);border:1px solid var(--bd);border-radius:999px;padding:1px 8px;margin:2px;color:var(--mut)}
+dialog{border:0;border-radius:18px;background:var(--bg2);color:var(--tx);max-width:min(480px,92vw);padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog svg{width:120px;border-radius:50%;display:block;margin:0 auto 8px}
+.big{font-family:"Bebas Neue",Impact,sans-serif;font-size:2.4rem;color:var(--ac);line-height:1}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:20}
+.toast.on{opacity:1}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:0 16px 28px}
+@media(max-width:560px){.logo{font-size:1.4rem}nav a{padding:6px 9px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><svg width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 4l10 34 36 12-36 12-10 34-10-34L4 50l36-12z" fill="#f26b0f"/><circle cx="50" cy="50" r="9" fill="#fff7ef"/></svg>Quem é o <b>Shinobi?</b></div>
+  <nav id="nav"><a href="#jogar">Jogar</a><a href="#personagens">Personagens</a><a href="#placar">Placar</a><a href="#contato">Contato</a></nav>
+  <button class="ic" id="tg" aria-label="Alternar modo escuro">🌙</button>
+</header>
+<main>
+<section class="pg" id="jogar">
+  <div class="hero"><h1>Descubra o <span>personagem</span></h1><p>Eu mostro uma dica. Você digita quem acha que é. Errou? Aparece outra dica, até você acertar.</p></div>
+  <form class="card" id="cfg"><div class="row">
+    <div><label for="grp">Grupo de personagens</label><select id="grp"><option value="all">Todos</option><option value="konoha">Vila da Folha</option><option value="hokage">Hokage</option><option value="vilao">Vilões</option><option value="sensei">Mestres</option><option value="sannin">Sannin</option><option value="akatsuki">Akatsuki</option></select></div>
+    <div><label for="dif">Dificuldade</label><select id="dif"><option value="f">Fácil (com sugestões de nomes)</option><option value="d">Difícil (digite tudo)</option></select></div>
+    <button class="btn" type="submit">Novo jogo</button></div></form>
+  <div class="card" id="game" hidden></div>
+</section>
+
+<section class="pg" id="personagens">
+  <h2 style="font-size:2.4rem">Personagens</h2>
+  <form class="card" id="flt" onsubmit="return false"><div class="row">
+    <div><label for="q">Buscar</label><input id="q" type="search" placeholder="Ex.: Kakashi"></div>
+    <div><label for="fg">Filtrar por grupo</label><select id="fg"><option value="all">Todos</option><option value="konoha">Vila da Folha</option><option value="hokage">Hokage</option><option value="vilao">Vilões</option><option value="sensei">Mestres</option><option value="sannin">Sannin</option><option value="akatsuki">Akatsuki</option></select></div>
+    <div><label for="ord">Ordem</label><select id="ord"><option value="a">A → Z</option><option value="z">Z → A</option></select></div></div></form>
+  <p class="mut" id="cnt"></p><div class="grid" id="list"></div>
+</section>
+
+<section class="pg" id="placar">
+  <h2 style="font-size:2.4rem">Seu placar</h2>
+  <div class="card"><div class="row" id="sts"></div></div>
+  <div class="card"><h3 style="font-size:1.6rem">Últimas partidas</h3><div id="hist" class="mut"></div><br><button class="btn s" id="rst">Zerar placar</button></div>
+</section>
+
+<section class="pg" id="contato">
+  <h2 style="font-size:2.4rem">Sugira um personagem</h2>
+  <form class="card" id="sug"><div class="row">
+    <div><label for="sn">Seu nome</label><input id="sn" required minlength="2"></div>
+    <div><label for="se">E-mail</label><input id="se" type="email" required></div>
+    <div><label for="sp">Personagem sugerido</label><input id="sp" required></div></div><br>
+    <label for="sm">Por que ele(a) deve entrar?</label><textarea id="sm" rows="3" required minlength="10"></textarea><br>
+    <label for="sr">Nota para o site: <output id="so">5</output>/5</label><input id="sr" type="range" min="1" max="5" value="5" oninput="so.value=this.value"><br><br>
+    <label style="font-weight:400"><input type="checkbox" required style="width:auto"> Entendo que a sugestão fica salva só neste aparelho.</label><br>
+    <button class="btn" type="submit">Enviar sugestão</button><p class="msg" id="sok"></p></form>
+</section>
+</main>
+<dialog id="dlg"></dialog><div class="toast" id="toast"></div>
+<footer>Projeto feito por fãs, sem fins lucrativos. Naruto pertence a Masashi Kishimoto e aos detentores dos direitos. Os desenhos são ilustrações simples criadas para o site.</footer>
+
+<script>
+var $=function(i){return document.getElementById(i)};
+function ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+var RAW=[
+"Naruto Uzumaki|naruto|konoha hokage|Nasceu na Vila da Folha, mas cresceu sozinho e ignorado.|Sonha em se tornar Hokage para ser reconhecido por todos.|Usa clones das sombras e guarda uma Besta de Nove Caudas.|Barulhento, teimoso e nunca desiste.|Ama ramen e termina frases com “dattebayo”.|#f5c518|s|#2f7de1|1|w|#ff7a1a|",
+"Sasuke Uchiha|sasuke|konoha vilao|Vem de um clã famoso da Vila da Folha.|Fez parte do Time 7, mas abandonou a vila.|Domina o Sharingan e técnicas de raio.|Orgulhoso, frio e movido por vingança.|É o grande rival e melhor amigo do protagonista.|#1a1a2e|s|sh|1|-|#2d3a8c|",
+"Sakura Haruno|sakura|konoha|Nasceu na Vila da Folha, sem clã famoso.|Integrante do Time 7.|Tem controle de chakra perfeito e força descomunal.|Inteligente, esforçada e de temperamento explosivo.|Aprendeu medicina ninja com uma Hokage.|#f4a6c0|n|#2fa05a|1|-|#e11d48|",
+"Kakashi Hatake|kakashi|konoha hokage sensei|Foi um prodígio da Vila da Folha.|Liderou o Time 7 e depois virou Hokage.|Copia técnicas alheias com um olho especial.|Calmo, sempre atrasado e viciado em um livro.|Esconde o rosto com uma máscara.|#cfd6e0|s|#222222|1|m|#1e3a8a|",
+"Itachi Uchiha|itachi|konoha vilao akatsuki|Foi um gênio da Vila da Folha.|Largou a vila e entrou numa organização de mantos vermelhos.|Mestre de genjutsu e do Sharingan.|Frio por fora, protetor por dentro.|Guarda um dos maiores segredos da Folha.|#1a1a2e|l|sh|1|sc|#991b1b|",
+"Gaara|gaara|suna|Vem da Vila da Areia.|Chega a Kazekage ainda jovem.|Controla areia e já abrigou uma Besta.|Começou sombrio e solitário, mas virou gentil.|Tem a marca “amor” na testa e olheiras fundas.|#c2410c|n|#3fb8c0|0|lv|#a16207|",
+"Hinata Hyuga|hinata|konoha|Vem de um clã nobre da Vila da Folha.|Kunoichi do Time 8.|Enxerga o chakra com olhos pálidos.|Tímida, doce e muito corajosa.|Admira o protagonista desde criança.|#1f2a5a|l|by|1|-|#8b83ff|",
+"Jiraiya|jiraiya|konoha sensei sannin|Ninja lendário da Vila da Folha.|Um dos três Sannin e mestre do protagonista.|Invoca sapos gigantes e usa o Modo Sábio.|Brincalhão e pervertido, mas grande mentor.|Escreve romances que viram best-sellers.|#f5f5f5|s|#222222|1|-|#15803d|",
+"Madara Uchiha|madara|konoha vilao|Co-fundou uma vila que depois o traiu.|Foi líder lendário do clã Uchiha.|Dominou o Sharingan mais avançado e controla Bestas.|Ambicioso e convencido de que paz só vem por uma ilusão.|Sua rivalidade com o Primeiro Hokage mudou o mundo ninja.|#111111|s|sh|0|sc|#374151|",
+"Rock Lee|lee,rocklee|konoha|Vem da Vila da Folha.|Aprendiz de um sensei de collant verde.|Não usa ninjutsu: vence no taijutsu.|Esforçado, disciplinado e emotivo.|Tem corte de cabelo tigela e sobrancelhas grossas.|#111111|n|#111111|1|-|#16a34a|",
+"Shikamaru Nara|shikamaru|konoha|Vem de um clã da Folha famoso por cervos.|É líder de equipe e conselheiro de Hokage.|Prende inimigos com sombras e planeja como no xadrez.|Preguiçoso, mas genial.|Vive dizendo que tudo é “problemático”.|#1a1a2e|b|#222222|1|-|#14532d|",
+"Orochimaru|orochimaru|konoha vilao sannin akatsuki|Nasceu na Vila da Folha, mas foi expulso.|Um dos três Sannin que virou criminoso.|Usa cobras e busca a imortalidade.|Curioso, cruel e obcecado por técnicas proibidas.|Tem pele pálida e olhos de cobra.|#111111|l|#f5c518|0|p|#6d28d9|#e5e7eb",
+"Minato Namikaze|minato,quartohokage|konoha hokage sensei|Vem da Vila da Folha.|Foi o Quarto Hokage.|Teletransporta-se com o Flash do Deus do Trovão.|Gentil, brilhante e sacrificado.|Seu apelido é Relâmpago Amarelo.|#f5c518|s|#2f7de1|1|-|#f8fafc|",
+"Tsunade|tsunade,quintahokage|konoha hokage sannin sensei|Neta de um fundador da Vila da Folha.|Foi a Quinta Hokage.|Tem força sobre-humana e cura quase tudo.|Azarada nas apostas e de temperamento explosivo.|Parece jovem, mas tem décadas de idade.|#f5c518|l|#b45309|0|d|#15803d|",
+"Neji Hyuga|neji|konoha|Vem de um clã nobre da Vila da Folha.|Gênio do time do sensei de collant verde.|Gira o corpo para criar uma defesa de 360 graus.|Frio no início e crente no destino.|Tem olhos pálidos como os de sua prima.|#3b2a20|l|by|1|-|#e2e8f0|",
+"Kisame Hoshigaki|kisame|kiri vilao akatsuki|Vem da Vila da Névoa.|É parceiro de Itachi numa organização de mantos vermelhos.|Empunha uma espada gigante e tem chakra enorme.|Leal, sádico e sorridente.|Parece um tubarão em forma humana.|#1e3a8a|s|#f5c518|0|g|#991b1b|#7aa0c8"];
+function norm(s){return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"")}
+var D=RAW.map(function(r){var a=r.split("|"),n=a[0];
+ return{n:n,al:[norm(n),norm(n.split(" ")[0])].concat(a[1].split(",").map(norm)),t:a[2].split(" "),cl:[a[3],a[4],a[5],a[6],a[7]],h:a[8],s:a[9],e:a[10],b:a[11]=="1",m:a[12],c:a[13],k:a[14]||"#f6d3b0"}});
+var TL={konoha:"Folha",hokage:"Hokage",vilao:"Vilão",sensei:"Mestre",sannin:"Sannin",akatsuki:"Akatsuki",suna:"Areia",kiri:"Névoa"};
+function av(c){var h=c.h,k=c.k,o='<svg viewBox="0 0 100 100" role="img" aria-label="'+c.n+'"><rect width="100" height="100" fill="'+c.c+'33"/>';
+ if(c.s=="l")o+='<path d="M24 46q0-30 26-30t26 30v36q-10 6-26 6t-26-6z" fill="'+h+'"/>';
+ if(c.s=="b")o+='<circle cx="50" cy="13" r="9" fill="'+h+'"/>';
+ o+='<path d="M16 100q0-26 34-26t34 26z" fill="'+c.c+'"/><rect x="43" y="66" width="14" height="12" fill="'+k+'"/><ellipse cx="50" cy="50" rx="22" ry="25" fill="'+k+'"/>';
+ if(c.s=="s")o+='<path d="M26 48L20 20l16 9 5-17 9 15 9-15 5 17 16-9-6 28q-6-16-24-16t-24 16z" fill="'+h+'"/>';
+ else o+='<path d="M27 46q0-27 23-27t23 27q-8-13-23-13t-23 13z" fill="'+h+'"/>';
+ if(c.m=="p")o+='<ellipse cx="40" cy="52" rx="7" ry="5" fill="#7c3aed" opacity=".5"/><ellipse cx="60" cy="52" rx="7" ry="5" fill="#7c3aed" opacity=".5"/>';
+ var e=c.e=="sh"?"#dc2626":c.e=="by"?"#e0e7ff":c.e;
+ o+='<circle cx="40" cy="52" r="4.2" fill="'+e+'"/><circle cx="60" cy="52" r="4.2" fill="'+e+'"/>';
+ if(c.e!="by")o+='<circle cx="40" cy="52" r="1.6" fill="#111"/><circle cx="60" cy="52" r="1.6" fill="#111"/>';
+ if(c.m=="m")o+='<path d="M29 57h42v7q-21 14-42 0z" fill="#334155"/>';else o+='<path d="M44 66q6 4 12 0" stroke="#7c2d12" stroke-width="2" fill="none" stroke-linecap="round"/>';
+ if(c.m=="w")o+='<path d="M29 56l8 1M29 61l8-1M71 56l-8 1M71 61l-8-1" stroke="#7a4a1e" stroke-width="1.8"/>';
+ if(c.m=="sc")o+='<path d="M36 60q4 4 4 9M64 60q-4 4-4 9" stroke="#7c2d12" stroke-width="1.8" fill="none"/>';
+ if(c.m=="lv")o+='<path d="M46 31h8v7h-8z" fill="#dc2626"/>';
+ if(c.m=="d")o+='<path d="M50 32l3 4-3 4-3-4z" fill="#7c3aed"/>';
+ if(c.m=="g")o+='<path d="M28 54h5M28 58h5M28 62h5M72 54h-5M72 58h-5M72 62h-5" stroke="#1e3a8a" stroke-width="1.5"/>';
+ if(c.b)o+='<rect x="27" y="34" width="46" height="8" fill="#243b8f"/><rect x="41" y="35" width="18" height="6" rx="1" fill="#cbd5e1"/>';
+ return o+'</svg>'}
+function toast(t){var x=$("toast");x.textContent=t;x.classList.add("on");setTimeout(function(){x.classList.remove("on")},2200)}
+/* tema */
+function theme(t){document.documentElement.dataset.theme=t;ls("th",t);$("tg").textContent=t=="dark"?"☀️":"🌙"}
+theme(ls("th")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"));
+$("tg").onclick=function(){theme(document.documentElement.dataset.theme=="dark"?"light":"dark")};
+/* rotas */
+function route(){var p=(location.hash||"#jogar").slice(1);if(!$(p))p="jogar";
+ document.querySelectorAll(".pg").forEach(function(s){s.classList.toggle("on",s.id==p)});
+ document.querySelectorAll("#nav a").forEach(function(a){a.classList.toggle("on",a.hash=="#"+p)});
+ if(p=="placar")stats();window.scrollTo(0,0)}
+addEventListener("hashchange",route);
+/* jogo */
+var G=null,last=-1;
+function pool(){var g=$("grp").value;return D.filter(function(c){return g=="all"||c.t.indexOf(g)>-1})}
+$("cfg").onsubmit=function(e){e.preventDefault();var p=pool(),i;do{i=Math.floor(Math.random()*p.length)}while(p.length>1&&p[i]==last);
+ last=p[i];G={c:p[i],n:1,w:[],sc:100,end:0};$("game").hidden=false;draw();$("game").scrollIntoView({behavior:"smooth"})};
+function clues(c){return c.cl.concat(["Começa com “"+c.n[0]+"” e tem "+c.n.replace(/ /g,"").length+" letras."])}
+function draw(){var c=G.c,cl=clues(c),h='<div class="stats"><span class="pill">🎯 Pontos: '+G.sc+'</span><span class="pill">❌ Erros: '+G.w.length+'</span><span class="pill">💡 Dicas: '+G.n+'/6</span></div><ol class="cl">';
+ for(var i=0;i<6;i++)h+=i<G.n?'<li class="on"><b>Dica '+(i+1)+'</b>'+cl[i]+'</li>':'<li class="lock">🔒 Dica '+(i+1)+' bloqueada</li>';
+ h+='</ol><form class="gf" id="gf" autocomplete="off"><input id="gi" placeholder="Quem é o personagem?" required '+($("dif").value=="f"?'list="dl"':'')+' aria-label="Nome do personagem"><button class="btn" type="submit">Chutar</button></form>'+
+ '<datalist id="dl">'+D.map(function(x){return'<option value="'+x.n+'">'}).join("")+'</datalist>'+
+ '<div class="chips">'+G.w.map(function(w){return'<span class="x">✗ '+w+'</span>'}).join("")+'</div><p class="msg" id="gm" aria-live="polite"></p>'+
+ '<button class="btn s" id="hb"'+(G.n>=6?" disabled":"")+'>💡 Pedir dica (−5)</button> <button class="btn s" id="gv">Desistir</button>';
+ $("game").innerHTML=h;$("gf").onsubmit=guess;$("hb").onclick=function(){G.n++;G.sc=Math.max(10,G.sc-5);draw()};$("gv").onclick=function(){finish(0)};$("gi").focus()}
+function guess(e){e.preventDefault();var v=$("gi").value.trim(),k=norm(v);if(!k)return;
+ if(G.c.al.indexOf(k)>-1)return finish(1);
+ if(G.w.some(function(w){return norm(w)==k})){$("gm").textContent="Você já tentou esse!";return}
+ G.w.push(v);G.sc=Math.max(10,G.sc-10);if(G.n<6)G.n++;draw();
+ var m=$("gm");m.textContent="Errou! Nova dica liberada.";m.style.color="var(--no)";$("game").classList.remove("shake");void $("game").offsetWidth;$("game").classList.add("shake")}
+function finish(win){var s=ls("st")||{p:0,w:0,s:0,b:0,best:0,tot:0,h:[]},pts=win?G.sc:0;
+ s.p++;s.tot+=G.w.length+(win?1:0);if(win){s.w++;s.s++;s.b=Math.max(s.b,s.s);s.best=Math.max(s.best,pts)}else s.s=0;
+ s.h.unshift({n:G.c.n,w:win,p:pts,t:G.w.length+(win?1:0)});s.h=s.h.slice(0,8);ls("st",s);
+ $("game").innerHTML='<div class="res"><p class="mut">'+(win?"🎉 Acertou!":"Era...")+'</p>'+av(G.c)+'<h2>'+G.c.n+'</h2><p>'+G.c.t.map(function(t){return'<span class="tag">'+(TL[t]||t)+'</span>'}).join("")+'</p><p>'+
+ (win?'Você fez <b>'+pts+' pontos</b> com '+G.w.length+' erro(s).':'Sem pontos desta vez. Bora de novo?')+'</p><button class="btn" onclick="$(\'cfg\').requestSubmit()">Próximo personagem</button></div>';G.end=1}
+/* personagens */
+function list(){var q=norm($("q").value),g=$("fg").value,r=D.filter(function(c){return(g=="all"||c.t.indexOf(g)>-1)&&(!q||norm(c.n).indexOf(q)>-1)});
+ r.sort(function(a,b){return $("ord").value=="a"?a.n.localeCompare(b.n):b.n.localeCompare(a.n)});
+ $("cnt").textContent=r.length+" personagem(ns) encontrado(s)";
+ $("list").innerHTML=r.map(function(c){return'<button class="ch" data-n="'+c.n+'">'+av(c)+'<b>'+c.n+'</b>'+c.t.map(function(t){return'<span class="tag">'+(TL[t]||t)+'</span>'}).join("")+'</button>'}).join("")||'<p class="mut">Nada encontrado. Tente outro filtro!</p>'}
+["q","fg","ord"].forEach(function(i){$(i).oninput=list});
+$("list").onclick=function(e){var b=e.target.closest(".ch");if(!b)return;var c=D.filter(function(x){return x.n==b.dataset.n})[0];
+ $("dlg").innerHTML=av(c)+'<h3 style="font-size:2rem;text-align:center">'+c.n+'</h3><ul>'+c.cl.map(function(x){return'<li>'+x+'</li>'}).join("")+'</ul><button class="btn" onclick="dlg.close()">Fechar</button>';$("dlg").showModal()};
+/* placar */
+function stats(){var s=ls("st")||{p:0,w:0,s:0,b:0,best:0,tot:0,h:[]},it=[["Partidas",s.p],["Vitórias",s.w],["Sequência",s.s],["Melhor sequência",s.b],["Melhor pontuação",s.best],["Média de chutes",s.w?(s.tot/s.p).toFixed(1):"–"]];
+ $("sts").innerHTML=it.map(function(x){return'<div><div class="big">'+x[1]+'</div>'+x[0]+'</div>'}).join("");
+ $("hist").innerHTML=s.h.length?s.h.map(function(x){return(x.w?"✅ ":"❌ ")+x.n+" — "+x.p+" pts ("+x.t+" chute(s))"}).join("<br>"):"Nenhuma partida ainda. Vá jogar!"}
+$("rst").onclick=function(){if(confirm("Zerar todo o placar?")){ls("st",null);stats();toast("Placar zerado")}};
+/* sugestões */
+$("sug").onsubmit=function(e){e.preventDefault();var l=ls("sg")||[];l.push({n:$("sn").value,e:$("se").value,p:$("sp").value,m:$("sm").value,r:$("sr").value});ls("sg",l);
+ $("sok").textContent="Valeu, "+$("sn").value+"! Sugestão de “"+$("sp").value+"” salva.";$("sok").style.color="var(--ok)";this.reset();$("so").value=5;toast("Sugestão enviada ✔")};
+list();route();
+</script>
+</body>
+</html>
